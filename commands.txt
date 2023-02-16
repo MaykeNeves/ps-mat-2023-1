@@ -1,0 +1,2 @@
+//gerar model + migration
+npx sequelize-cli model:generate --name User --attributes id:integer,name:string,email:string,verified_email:boolean,,id_admin:boolean,phone:string,password:string
