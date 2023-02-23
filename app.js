@@ -30,7 +30,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+/*          ROTAS           */
+const users = require('./routes/users')
+app.use('/users', users) 
 
 module.exports = app;
