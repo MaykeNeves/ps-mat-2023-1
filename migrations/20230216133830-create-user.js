@@ -9,9 +9,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      id: {
-        type: Sequelize.INTEGER
-      },
+     
       name: {
         type: Sequelize.STRING(100)
       },
@@ -21,7 +19,7 @@ module.exports = {
       verified_email: {
         type: Sequelize.BOOLEAN
       },
-      id_admin: {
+      is_admin: {
         type: Sequelize.BOOLEAN
       },
       phone: {

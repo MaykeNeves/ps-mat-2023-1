@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
        allowNull: false,
        default: false
     },
-    id_admin: {
+    is_admin: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       default: false
