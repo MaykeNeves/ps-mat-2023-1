@@ -48,4 +48,55 @@ controller.retrieveOne = async (req,res) => {
     }
 }
 
+controller.update = async (req, res) => {
+    try{
+        const response = await User.update(
+            req.body,
+            { where: { id: req.params.id } }
+        )
+    
+
+        //response retorna um vetor. O primeiro elmento
+        // do vetor indica quantos resistreos foram afetados
+        // pelo update
+        if(response[0] > 0){
+            // http 204: no content
+            res.status(204).end()
+        }
+
+        else {
+            //http 404: Not found
+            res.status(404).end()
+        }
+
+    }
+
+    catch(error){
+        console.error(error)
+    }
+}
+
+controller.delete = async (req,res) =>{
+    try{
+        const response = await User.destroy(
+            { where: {id: req.params.id } }
+        )
+        
+        if(response){//encontrou e excluiu
+
+            //http 204: no content
+            res.status(204).end()
+        }
+        else{ //não encontrou e não excluiu
+            // http 404: not found
+            res.status(404).end()
+        }
+
+    }
+    catch(error){
+         console.error(error)
+    }
+}
+
+
 module.exports = controller
