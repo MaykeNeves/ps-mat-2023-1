@@ -11,3 +11,8 @@ npx sequelize-cli model:generate --name PaymentMethod --attributes description:s
 //gerar model + migration
 npx sequelize-cli model:generate --name City --attributes name:string,state:string
 
+//gerar model + migration
+npx sequelize-cli model:generate --name Carrier --attributes name:string
+
+//gerar model + migration
+npx sequelize-cli model:generate --name ShipmentPriority --attributes description:string
