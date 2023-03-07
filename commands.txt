@@ -7,3 +7,7 @@ npx sequelize-cli model:generate --name Channel --attributes id:integer,descript
 
 //gerar model + migration
 npx sequelize-cli model:generate --name PaymentMethod --attributes description:string,operator_fee:decimal
+
+//gerar model + migration
+npx sequelize-cli model:generate --name City --attributes name:string,state:string
+
