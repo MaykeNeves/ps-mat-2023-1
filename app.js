@@ -34,4 +34,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 const users = require('./routes/users')
 app.use('/users', users) 
 
+const channels = require('./routes/channels')
+app.use('/channels', channels)
+
+const paymentMethods = require('./routes/payment_methods')
+app.use('/payment_methods', paymentMethods)
+
 module.exports = app;
