@@ -16,3 +16,18 @@ npx sequelize-cli model:generate --name Carrier --attributes name:string
 
 //gerar model + migration
 npx sequelize-cli model:generate --name ShipmentPriority --attributes description:string
+
+//gerar model + migration
+npx sequelize-cli model:generate --name Tag --attributes description:string,color:string,type:enum
+
+//gerar model + migration
+npx sequelize-cli model:generate --name Customer --attributes name:string,address:text,phone:string,is_whatsapp:boolean,city_id:integer
+
+//gerar model + migration
+npx sequelize-cli model:generate --name OrderRelStatus --attributes order_id:integer,order_status_id:integer,user_id:integer
+
+//gerar model + migration
+npx sequelize-cli model:generate --name OrderStatus --attributes sequence:tinyint,description:string
+
+//gerar model + migration
+npx sequelize-cli model:generate --name CustomerTag --attributes customer_id:integer,tag_id:integer

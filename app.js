@@ -49,4 +49,19 @@ app.use('/carriers',carriers)
 const shipmentPriorities = require('./routes/shipment_priorities')
 app.use('/shipment_priorities',shipmentPriorities)
 
+const tags = require('./routes/tags')
+app.use('/tags',tags)
+
+const customers = require('./routes/customers')
+app.use('/tags',customers)
+
+const orderrelstatus = require('./routes/orderrelstatuses')
+app.use('/tags',orderrelstatus)
+
+const orderStatus = require('./routes/order_statuses')
+app.use('/tags',orderStatus)
+
+const orderTag = require('./routes/order_tag')
+app.use('/tags',orderTag)
+
 module.exports = app;
