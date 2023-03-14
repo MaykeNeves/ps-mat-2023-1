@@ -21,9 +21,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER
     },
     name: {
+      allowNull: false,
       type: DataTypes.STRING(100)
     },
     state: {
+      allowNull: false,
       type: DataTypes.STRING(2)
     },
   }, {

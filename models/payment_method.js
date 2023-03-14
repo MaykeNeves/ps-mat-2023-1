@@ -21,9 +21,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER
     },
     description: {
+      allowNull: false,
       type: DataTypes.STRING(30)
     },
     operator_fee: {
+      allowNull: false,
       type: DataTypes.DECIMAL(18,2)
     },
   }, {

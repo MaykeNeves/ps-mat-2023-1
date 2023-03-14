@@ -10,9 +10,11 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       description: {
+        allowNull: false,
         type: Sequelize.STRING(30)
       },
       operator_fee: {
+        allowNull: false,
         type: Sequelize.DECIMAL(18,2)
       },
       createdAt: {
