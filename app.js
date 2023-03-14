@@ -56,7 +56,7 @@ const customers = require('./routes/customers')
 app.use('/customers',customers)
 
 const orderRelStatuses = require('./routes/order_rel_statuses')
-app.use('/order_rel_statuses',orderRelStatuses)
+app.use('/order_rel_statuses',orderRelStatuses) 
 
 const orderStatuses = require('./routes/order_statuses')
 app.use('/order_statuses',orderStatuses)
