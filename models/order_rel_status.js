@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'OrderRelStatus',
-    tableName: 'order_rel_status'
+    tableName: 'order_rel_statuses'
   });
   return OrderRelStatus;
 };
