@@ -1,5 +1,5 @@
 // importar o model correspondente ao controller
-const {OrderStatusRel} = require('../models')
+const {OrderRelStatus} = require('../models')
 
 const controller = {}  // objeto vazio
 /*
@@ -12,7 +12,7 @@ const controller = {}  // objeto vazio
 */ 
 controller.create = async (req, res) => {
     try {
-        await OrderStatusRel.create(req.body)
+        await OrderRelStatus.create(req.body)
         res.status(201).end()
     }
     catch(error){
@@ -22,7 +22,7 @@ controller.create = async (req, res) => {
 
 controller.retrieve = async (req,res) => {
     try{
-        const data = await OrderStatusRel.findAll()
+        const data = await OrderRelStatus.findAll()
         //HTTP 200: OK(Implícito)
         res.send(data)
 
@@ -34,7 +34,7 @@ controller.retrieve = async (req,res) => {
 
 controller.retrieveOne = async (req,res) => {
     try{
-        const data = await OrderStatusRel.findByPk(req.params.id)
+        const data = await OrderRelStatus.findByPk(req.params.id)
 
 
         //HTTP 200: OK(Implícito)
@@ -50,7 +50,7 @@ controller.retrieveOne = async (req,res) => {
 
 controller.update = async (req, res) => {
     try{
-        const response = await OrderStatusRel.update(
+        const response = await OrderRelStatus.update(
             req.body,
             { where: { id: req.params.id } }
         )
@@ -78,7 +78,7 @@ controller.update = async (req, res) => {
 
 controller.delete = async (req,res) =>{
     try{
-        const response = await OrderStatusRel.destroy(
+        const response = await OrderRelStatus.destroy(
             { where: {id: req.params.id } }
         )
         
