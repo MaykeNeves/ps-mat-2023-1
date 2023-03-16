@@ -37,3 +37,6 @@ npx sequelize-cli model:generate --name OrderTag --attributes order_id:integer,t
 
 //gerar model + migration
 npx sequelize-cli model:generate --name Order --attributes external_code:string,theme:string,description:text,remarks:text,pic_url:string,custom_name:string,custom_age:integer,order_date:date,event_date:date,artwork_date:date,shipment_date:date,total_amount:decimal,customer_id:integer,channel_id:integer,carrier_id:integer,shipment_priority_id:integer,payment_method_id:integer
+
+//comando para gerar apenas uma migration (sem model)
+npx sequelize-cli migration:generate --name alter-table-users
