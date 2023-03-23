@@ -11,6 +11,20 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+
+      this.belongsTo(models.Tag, {
+        foreignKey: 'order_id',    //Nome do campo na tabela de ORIGEM
+        targetKey: 'id',          //Nome do campo na tabela de Destino
+        as: 'tag'                //Nome do atributo para exibição
+      })
+
+      this.belongsTo(models.Order, {
+        foreignKey: 'tag_id',    //Nome do campo na tabela de ORIGEM
+        targetKey: 'id',          //Nome do campo na tabela de Destino
+        as: 'order'                //Nome do atributo para exibição
+      })
+
+
     }
   }
   OrderTag.init({
