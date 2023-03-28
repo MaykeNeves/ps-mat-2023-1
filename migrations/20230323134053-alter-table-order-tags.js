@@ -6,9 +6,9 @@ module.exports = {
     await queryInterface.addConstraint('order_tags', {
       fields: ['order_id'],
       type: 'foreign key',
-      name: 'customer_tags_customers_fk', //nome chave estrangeira(deve ser unico do BD)
+      name: 'order_tags_order_fk', //nome chave estrangeira(deve ser unico do BD)
       references: {
-        table: 'customers',  //tabela estrangeira
+        table: 'orders',  //tabela estrangeira
         field: 'id'       //Campo da tabela estrangeira
       },
       onDelete: 'RESTRICT',    //Não deixa apagar uma customer em uso no customer
@@ -18,7 +18,7 @@ module.exports = {
     await queryInterface.addConstraint('order_tags', {
       fields: ['order_id'],
       type: 'foreign key',
-      name: 'customer_tags_tags_fk', //nome chave estrangeira(deve ser unico do BD)
+      name: 'order_tags_tags_fk', //nome chave estrangeira(deve ser unico do BD)
       references: {
         table: 'tags',  //tabela estrangeira
         field: 'id'       //Campo da tabela estrangeira
@@ -30,7 +30,7 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.removeConstraint('order_tags', 'customer_tags_tags_fk')
-    await queryInterface.removeConstraint('order_tags', 'customer_tags_customers_fk')
+    await queryInterface.removeConstraint('order_tags', 'order_tags_order_fk')
+    await queryInterface.removeConstraint('order_tags', 'order_tags_tags_fk')
   }
 };

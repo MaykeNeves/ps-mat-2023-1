@@ -11,6 +11,55 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+
+      this.belongsTo(models.Customer, {
+        foreignKey: 'customer_id',    //Nome do campo na tabela de ORIGEM
+        targetKey: 'id',          //Nome do campo na tabela de Destino
+        as: 'customer'                //Nome do atributo para exibição
+      })
+
+      this.belongsTo(models.Channel, {
+        foreignKey: 'channel_id',    //Nome do campo na tabela de ORIGEM
+        targetKey: 'id',          //Nome do campo na tabela de Destino
+        as: 'channel'                //Nome do atributo para exibição
+      })
+
+      this.belongsTo(models.Carrier, {
+        foreignKey: 'carrier_id',    //Nome do campo na tabela de ORIGEM
+        targetKey: 'id',          //Nome do campo na tabela de Destino
+        as: 'carrier'                //Nome do atributo para exibição
+      })
+
+      this.belongsTo(models.ShipmentPriority, {
+        foreignKey: 'shipment_priority_id',    //Nome do campo na tabela de ORIGEM
+        targetKey: 'id',          //Nome do campo na tabela de Destino
+        as: 'shipment_priority'                //Nome do atributo para exibição
+      })
+
+      this.belongsTo(models.PaymentMethod, {
+        foreignKey: 'payment_method_id',    //Nome do campo na tabela de ORIGEM
+        targetKey: 'id',          //Nome do campo na tabela de Destino
+        as: 'payment_method'                //Nome do atributo para exibição
+      })
+
+      this.belongsToMany(models.OrderRelStatus, {
+        through: 'order_rel_statuses' , //tabela intermediaria
+        foreignKey: 'order_id',  //chave estrangeira da tabela intermediária
+        otherKey: 'order_status_id', // OUtra chave da tabela intermediaria
+        otherKey: 'user_id',
+        as: 'order_rel_status'    // Nome do campo de associação (plural)
+
+      })
+
+      this.belongsToMany(models.OrderTag, {
+        through: 'order_tags' , //tabela intermediaria
+        foreignKey: 'order_id',  //chave estrangeira da tabela intermediária
+        otherKey: 'tag_id', // OUtra chave da tabela intermediaria
+        
+        as: 'order_rel_statuses'    // Nome do campo de associação (plural)
+
+      })
+
     }
   }
   Order.init({

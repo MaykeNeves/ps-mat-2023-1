@@ -1,5 +1,5 @@
 // importar o model correspondente ao controller
-const {OrderRelStatus} = require('../models')
+const {OrderRelStatus, Order, OrderStatus, User} = require('../models')
 
 const controller = {}  // objeto vazio
 /*
@@ -22,7 +22,13 @@ controller.create = async (req, res) => {
 
 controller.retrieve = async (req,res) => {
     try{
-        const data = await OrderRelStatus.findAll()
+        const data = await OrderRelStatus.findAll({
+            include: [
+                {model: Order, as: 'order'},
+                {model: OrderStatus, as: 'orderStatus'},
+                {model: User, as: 'user'}
+                ]
+        })
         //HTTP 200: OK(Implícito)
         res.send(data)
 
