@@ -27,7 +27,7 @@ controller.retrieve = async (req,res) => {
                 {model: Channel, as: 'channel'},
                 {model: Carrier, as: 'carrier'},
                 {model: ShipmentPriority, as: 'shipment_priority'},
-                {model: PaymentMethod, as: 'payment_priority'},
+                {model: PaymentMethod, as: 'payment_method'},
                 {model: Customer, as: 'customer'}
                 ]
         })

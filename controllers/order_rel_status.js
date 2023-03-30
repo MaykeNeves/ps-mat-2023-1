@@ -25,7 +25,7 @@ controller.retrieve = async (req,res) => {
         const data = await OrderRelStatus.findAll({
             include: [
                 {model: Order, as: 'order'},
-                {model: OrderStatus, as: 'orderStatus'},
+                {model: OrderStatus, as: 'order_status'},
                 {model: User, as: 'user'}
                 ]
         })

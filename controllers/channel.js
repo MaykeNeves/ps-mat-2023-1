@@ -1,5 +1,5 @@
 // importar o model correspondente ao controller
-const {Channel} = require('../models')
+const {Channel,Order} = require('../models')
 
 const controller = {}  // objeto vazio
 /*
@@ -22,7 +22,9 @@ controller.create = async (req, res) => {
 
 controller.retrieve = async (req,res) => {
     try{
-        const data = await Channel.findAll()
+        const data = await Channel.findAll({
+            include: {model: Order, as: 'orders'}
+        })
         //HTTP 200: OK(Implícito)
         res.send(data)
 
