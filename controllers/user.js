@@ -1,5 +1,7 @@
 // importar o model correspondente ao controller
 const {User} = require('../models')
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
 const controller = {}  // objeto vazio
 /*
@@ -12,6 +14,9 @@ const controller = {}  // objeto vazio
 */ 
 controller.create = async (req, res) => {
     try {
+
+        //Criptografar senha
+        req.body.password = await bcrypt.hash(req.body.password, 12)
         await User.create(req.body)
         res.status(201).end()
     }
@@ -50,6 +55,14 @@ controller.retrieveOne = async (req,res) => {
 
 controller.update = async (req, res) => {
     try{
+
+        //se houver sido passado o campo "password",
+        //criptografa a senha
+        if(req.body.password){
+            req.body.password = await bcrypt.hash(req.body.password, 12)
+            
+        }
+
         const response = await User.update(
             req.body,
             { where: { id: req.params.id } }
@@ -98,5 +111,41 @@ controller.delete = async (req,res) =>{
     }
 }
 
+controller.login = async (req,res) => {
+    try {
+        const user = await User.scope('withPassword').findOne({where: {email: req.body.email}})
+
+        //Usuário não encontrado -> http 401: Unauthorized
+        if(!user) return res.status(401).end()
+
+        const pwMatches = await bcrypt.compare(req.body.password, user.password)
+
+        if(pwMatches){ 
+            // a senha confere
+            const token = jwt.sign({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            verified_email: user.verified_email,
+            is_admin: user.is_admin,
+            phone: user.phone
+        },
+        process.env.TOKEN_SECRET,  //Chave para criptografar o token
+        { expiresIn: '24h'}         // Duração do token
+        )
+
+        // Retorna o token -> HTTP 200: OK (implícito)
+        res.json({ auth: true,token })}
+        
+       
+    
+    else{
+        res.status(401).end()
+    }
+    }
+    catch(error){
+        console.error(error)
+    }
+}
 
 module.exports = controller
