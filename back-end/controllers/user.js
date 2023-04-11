@@ -111,41 +111,40 @@ controller.delete = async (req,res) =>{
     }
 }
 
-controller.login = async (req,res) => {
+controller.login = async (req, res) => {
     try {
-        const user = await User.scope('withPassword').findOne({where: {email: req.body.email}})
-
-        //Usuário não encontrado -> http 401: Unauthorized
-        if(!user) return res.status(401).end()
-
-        const pwMatches = await bcrypt.compare(req.body.password, user.password)
-
-        if(pwMatches){ 
-            // a senha confere
-            const token = jwt.sign({
+      const user = await User.scope('withPassword').findOne({ where: { email: req.body.email } })
+  
+      // Usuário não encontrado ~> HTTP 401: Unauthorized
+      if(!user) return res.status(401).end()
+  
+      const pwMatches = await bcrypt.compare(req.body.password, user.password)
+  
+      if(pwMatches) {
+        // A senha confere
+        const token = jwt.sign({
             id: user.id,
             name: user.name,
             email: user.email,
             verified_email: user.verified_email,
             is_admin: user.is_admin,
             phone: user.phone
-        },
-        process.env.TOKEN_SECRET,  //Chave para criptografar o token
-        { expiresIn: '24h'}         // Duração do token
+          },
+          process.env.TOKEN_SECRET,    // Chave para criptografar o token
+          { expiresIn: '24h' }         // Duração do token
         )
-
-        // Retorna o token -> HTTP 200: OK (implícito)
-        res.json({ auth: true,token })}
-        
-       
-    
-    else{
+  
+        // Retorna o token ~> HTTP 200: OK (implícito)
+        res.json({ auth: true, token })
+      }
+      else {
+        // Senha errada ~> HTTP 401: Unauthorized
         res.status(401).end()
+      }
     }
+    catch(error) {
+      console.error(error)
     }
-    catch(error){
-        console.error(error)
-    }
-}
+  }
 
 module.exports = controller
