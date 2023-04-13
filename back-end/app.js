@@ -7,8 +7,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+//var indexRouter = require('./routes/index');
+//var usersRouter = require('./routes/users');
 
 var app = express();
 
@@ -72,5 +72,11 @@ app.use('/order_tags',orderTags)
 
 const orders = require('./routes/orders')
 app.use('/orders',orders)
+
+const products = require('./routes/products')
+app.use('/products',products)
+
+const suppliers = require('./routes/suppliers')
+app.use('/suppliers',suppliers)
 
 module.exports = app;

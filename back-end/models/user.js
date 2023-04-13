@@ -11,11 +11,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.hasMany(models.OrderRelStatus, {
-        foreignKey: 'user_id',    //campo da tabela estrangeira
-        sourceKey: 'id',          // campo da tabela local
-        as: 'user_ids'           // nome do campo de associação(plural)
-      })
+     // this.hasMany(models.OrderRelStatus, {
+    //    foreignKey: 'user_id',    //campo da tabela estrangeira
+    //    sourceKey: 'id',          // campo da tabela local
+   //     as: 'user_ids'           // nome do campo de associação(plural)
+    //  })
     }
   }
   User.init({
