@@ -12,6 +12,11 @@ var logger = require('morgan');
 
 var app = express();
 
+// habilita que qualquer origem de front-end possa
+// acessar o back-end
+const cors = require('cors')
+app.use(cors())
+
 //Conexão do BD
 const db = require('./models')
 
@@ -30,8 +35,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-const auth = require('./lib/auth')
-app.use(auth)
+//const auth = require('./lib/auth')
+//app.use(auth)
 
 /*          ROTAS           */
 const users = require('./routes/users')
