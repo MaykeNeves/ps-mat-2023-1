@@ -6,6 +6,7 @@ import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
 import Snackbar from '@mui/material/Snackbar'
 import Alert from '@mui/material/Alert'
+import myfetch from '../utils/myfetch'
 
 export default function Login(){
 
@@ -24,22 +25,15 @@ export default function Login(){
     }
 
     async function handleSubmit(event){
-        event.preventDefault()
-        setShowWaiting(true)
+        event.preventDefault()  //impede o recarregamento da página
+        setShowWaiting(true)    //mostra o spinner de espera
         try {
-            let response = await fetch('http://localhost:3000/users/login', {
-                method: "POST",
-                body: JSON.stringify({email, password}),
-                headers: {"Content-type": "application/json; charset=UTF-8"}
-            })
-            
-            if(response.ok){
-                
-                const result = await response.json()
-                console.log({result})
 
-                //grava o toekn recebido no localstrorage
-                window.localStorage.setItem('token',result.token)
+            const result = await myfetch.post('/users/login', {email, password})
+
+            //grava o toekn recebido no localstrorage
+            window.localStorage.setItem('token',result.token)
+                
                 
                 //exobe o snackbar
                 setSnack({
@@ -47,13 +41,17 @@ export default function Login(){
                     message: 'Autenticação realizada com sucesso!',
                     severity: 'success'
                 })
-            } 
-            else throw new Error('Usuário ou senha incorretos')
+             
         }
 
         catch(error) {
             console.error(error)
-            //Exibe o snackbar de erro
+           
+
+            //apaga o token de autenticação no localStorage, case exista
+            window.localStorage.removeItem('token')
+
+             //Exibe o snackbar de erro
             setSnack({
                 show:true,
                 message: error.message,
