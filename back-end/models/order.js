@@ -39,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.PaymentMethod, {
         foreignKey: 'payment_method_id',    //Nome do campo na tabela de ORIGEM
         targetKey: 'id',          //Nome do campo na tabela de Destino
-        as: 'payment_method'                //Nome do atributo para exibição
+        as: 'orders'                //Nome do atributo para exibição
       })
 
       this.belongsToMany(models.OrderRelStatus, {

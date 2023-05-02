@@ -20,7 +20,7 @@ function App() {
       
       <BrowserRouter>
         <HeaderBar />
-        <Box sx={ {m:'25px auto'}}>
+        <Box sx={ {m:'25px auto', p: '16px'}}>
         <Routes>
           <Route path="/" element={<AuthGuard><Home /> </AuthGuard>} />
           <Route path="/login" element={<Login />} />
