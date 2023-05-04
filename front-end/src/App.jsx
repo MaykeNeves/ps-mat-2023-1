@@ -6,6 +6,7 @@ import HeaderBar from './components/ui/HeaderBar'
 import Box from '@mui/material/Box'
 import PaymentMethodList from './pages/payment_method/PaymentMethodList'
 
+
 function AuthGuard({children}){
   //Estaremos autenticados se tivermos um token gravado no localStorage
   if(window.localStorage.getItem('token')) return children

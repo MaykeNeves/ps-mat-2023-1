@@ -9,23 +9,40 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import  IconButton  from '@mui/material/IconButton';
 import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
+import ConfirmDialog from '../../components/ui/ConfirmDialog'
+import Snackbar from '@mui/material/Snackbar'
+import Alert from '@mui/material/Alert'
 
 export default function PaymentMethodList(){
 
-    const [paymentMethods, setPaymentMethods] = React.useState([])
-    const [showWaiting, setShowWaiting] = React.useState(false)
+    const [state, setState] = React.useState({
+      paymentMethods: [],
+      showWaiting: false,
+      showDialog: false,
+      deleteId: null,
+      snack: {
+        show: false,
+        message: '',
+        severity: 'success'
+    }
+    })
+    const {
+      paymentMethods,
+      showWaiting,
+      showDialog,
+      deleteId,
+      snack
+    } = state
 
     async function fetchData(){
-        setShowWaiting(true)
+        setState({...state, showWaiting: true})
         try{
             const result = await myfetch.get('/payment_methods')
-            setPaymentMethods(result)
+            setState({...state, paymentMethods: result, showWaiting: false, showDialog: false })
         }
         catch(error){
             console.log(error)
-        }
-        finally {
-            setShowWaiting(false)
+            setState({...state, showWaiting: false, showDialog: false})
         }
 
     }
@@ -55,7 +72,7 @@ export default function PaymentMethodList(){
             align: 'center',
             width: 90,
             renderCell: params => (
-                <IconButton aria-label="Editar">
+                <IconButton aria-label="Editar" >
                     <EditIcon />
                 </IconButton>
             )
@@ -67,14 +84,69 @@ export default function PaymentMethodList(){
             align: 'center',
             width: 90,
             renderCell: params => (
-                <IconButton aria-label="excluir">
-                    <DeleteForeverIcon color="error" />
+                <IconButton aria-label="excluir" onClick={() => setState({
+                  ...state,
+                  deleteId: params.id,    //guarda o id do item a ser excluído
+                  showDialog: true        // mostra o dialogo de confirmação
+                }
+                  
+                )}>
+                    <DeleteForeverIcon color="error"  />
                 </IconButton>
             )
         }
       ];
       
-      
+    async function handleDialogClose(answer) {
+      if(answer){
+        // Fecha o dialogo de confrmação e exibe o backdrop
+        setState({ ...state, showWaiting: true, showDialog: false})
+        try {
+          await myfetch.delete(`/payment_methods/${deleteId}`)
+          // dar feedback positivo para usuario e fechar o dialogo de confirmação
+          setState({
+            ...state,
+            showWaiting: false, // esconde o backdrop
+            showDialog: false,  // esconde o dialogo de confirmação
+            snack: {            // exibe a snackbar
+              show: true,
+              message: 'Item excluído com sucesso',
+              severity: 'success'
+            }
+          })
+
+          // Recarrrega os dados da listagem
+          fetchData()
+        }
+        catch(error){
+          console.error(error)
+          // Dar feedback negativo e fechar o dialogo de confirmação
+          setState({
+            ...state,
+            showWaiting: false, // esconde o backdrop
+            showDialog: false,  // esoncde o dialog o de confirmação
+            snack: {            // exibe a snackbar
+              show: true,
+              message: 'ERRO: ' + 'Item excluído com sucesso',
+              severity: 'error'
+            }
+          })
+        }
+      }
+
+      else {
+        // Fecha o dialogo de confirmação
+        setState({ ...state, showDialog: false})
+      }
+    }    
+    
+    function handleSnackClose(event, reason) {
+      if (reason === 'clickaway') {
+        return;
+      }
+
+      setState({...state, snack: {show: false}})
+  }
 
     return (
         <>
@@ -82,6 +154,17 @@ export default function PaymentMethodList(){
             <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={showWaiting}>
             <CircularProgress color="inherit" />
             </Backdrop>
+
+            <ConfirmDialog title="Confirmar operação" open={showDialog} onClose={handleDialogClose}>
+              Deseja realmente excluir este item?
+            </ConfirmDialog>
+
+
+            <Snackbar open={snack.show} autoHideDuration={4000} onClose={handleSnackClose}>
+                <Alert onClose={handleSnackClose} severity={snack.severity} sx={{ width: '100%' }}>
+                {snack.message}
+                </Alert>
+            </Snackbar>
 
         <Typography variant='h3' component="h1" sx={{textAlign: 'center'}}>
         Listagem de métodos de pagamento
