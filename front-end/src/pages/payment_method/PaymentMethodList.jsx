@@ -15,6 +15,8 @@ import Alert from '@mui/material/Alert'
 
 export default function PaymentMethodList(){
 
+    const API_PATH = '/payment_methods'
+
     const [state, setState] = React.useState({
       paymentMethods: [],
       showWaiting: false,
@@ -37,7 +39,7 @@ export default function PaymentMethodList(){
     async function fetchData(){
         setState({...state, showWaiting: true})
         try{
-            const result = await myfetch.get('/payment_methods')
+            const result = await myfetch.get(API_PATH)
             setState({...state, paymentMethods: result, showWaiting: false, showDialog: false })
         }
         catch(error){
@@ -102,7 +104,7 @@ export default function PaymentMethodList(){
         // Fecha o dialogo de confrmação e exibe o backdrop
         setState({ ...state, showWaiting: true, showDialog: false})
         try {
-          await myfetch.delete(`/payment_methods/${deleteId}`)
+          await myfetch.delete(`${API_PATH}/${deleteId}`)
           // dar feedback positivo para usuario e fechar o dialogo de confirmação
           setState({
             ...state,
