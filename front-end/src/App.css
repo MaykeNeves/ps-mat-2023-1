@@ -53,3 +53,16 @@
   visibility: visible;
 }
 
+form {
+  max-width: 80%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+form .MuiFormControl-root {
+  min-width: 200px;
+  max-width: 500;
+  margin-bottom: 25px;
+}

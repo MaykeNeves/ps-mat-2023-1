@@ -12,6 +12,11 @@ import CircularProgress from '@mui/material/CircularProgress'
 import ConfirmDialog from '../../components/ui/ConfirmDialog'
 import Snackbar from '@mui/material/Snackbar'
 import Alert from '@mui/material/Alert'
+//import { Box, Button, Link } from '@mui/material';
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import {Link} from 'react-router-dom'
+import AddCircleIcon from '@mui/icons-material/AddCircle'
 
 export default function PaymentMethodList(){
 
@@ -169,10 +174,28 @@ export default function PaymentMethodList(){
             </Snackbar>
 
         <Typography variant='h3' component="h1" sx={{textAlign: 'center'}}>
-        Listagem de métodos de pagamento
+        
         </Typography>
 
         <PageTitle title="Listagem de métodos de pagamento" />
+
+        <Box sx={{
+          display: "flex",
+          justifyContent: "right",
+          marginBottom: "25px"
+
+        }}>
+          <Link to="new" >
+          <Button variant="contained" 
+          size="large" 
+          color="secondary"
+          startIcon={<AddCircleIcon />}
+          >
+            Cadastrar Novo
+          </Button>
+          </Link>
+        </Box>
+
 
         <Paper elevation={4} sx={{ height: 400, width: '100%' }}>
       <DataGrid
