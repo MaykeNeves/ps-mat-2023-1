@@ -23,7 +23,7 @@ controller.create = async (req, res) => {
 controller.retrieve = async (req,res) => {
     try{
         const data = await Carrier.findAll({
-            include: {model: Order, as: 'orders'}
+            include: {model: Order, as: 'carriers'}
         })
         //HTTP 200: OK(Implícito)
         res.send(data)

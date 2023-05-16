@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.Order, {
         foreignKey: 'channel_id',    //campo da tabela estrangeira
         sourceKey: 'id',          // campo da tabela local
-        as: 'channels'           // nome do campo de associação(plural)
+        as: 'orders'           // nome do campo de associação(plural)
       })
     }
   }

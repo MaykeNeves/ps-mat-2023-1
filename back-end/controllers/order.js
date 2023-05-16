@@ -25,7 +25,7 @@ controller.retrieve = async (req,res) => {
         const data = await Order.findAll({
             include: [
                 {model: Channel, as: 'channel'},
-                {model: Carrier, as: 'carrier'},
+                {model: Carrier, as: 'carriers'},
                 {model: ShipmentPriority, as: 'shipment_priority'},
                 {model: PaymentMethod, as: 'orders'},
                 {model: Customer, as: 'customer'}

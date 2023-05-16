@@ -27,13 +27,13 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.Carrier, {
         foreignKey: 'carrier_id',    //Nome do campo na tabela de ORIGEM
         targetKey: 'id',          //Nome do campo na tabela de Destino
-        as: 'carrier'                //Nome do atributo para exibição
+        as: 'carriers'                //Nome do atributo para exibição
       })
 
       this.belongsTo(models.ShipmentPriority, {
         foreignKey: 'shipment_priority_id',    //Nome do campo na tabela de ORIGEM
         targetKey: 'id',          //Nome do campo na tabela de Destino
-        as: 'shipment_priority'                //Nome do atributo para exibição
+        as: 'shipment_priorities'                //Nome do atributo para exibição
       })
 
       this.belongsTo(models.PaymentMethod, {

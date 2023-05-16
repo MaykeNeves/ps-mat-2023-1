@@ -8,19 +8,19 @@ import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
 import Notification from '../../components/ui/Notification';
 import { useNavigate } from 'react-router-dom';
-import PaymentMethod from '../../models/PaymentMethod';
+import ChannelMethod from '../../models/ChannelMethod';
 import getValidationMessages from '../../utils/getValidationMessages';
 
-export default function PaymentMethodForm(){
+export default function ChannelMethodForm(){
 
-    const API_PATH = '/payment_methods'
+    const API_PATH = '/channels'
 
     const navigate = useNavigate()
 
     const [state,setState] = React.useState({
-        paymentMethod: {
+        channelMethod: {
             description: '',
-            operator_fee: ''
+            commission_fee: ''
         },
         errors: {},
         showWaiting: false,
@@ -32,16 +32,16 @@ export default function PaymentMethodForm(){
     })
 
     const{
-        paymentMethod,
+        channelMethod,
         errors,
         showWaiting,
         notif
     } = state
 
     function handleFormFieldChange(event){
-        const paymentMethodCopy = {...paymentMethod}
-        paymentMethodCopy[event.target.name] = event.target.value
-        setState({...state, paymentMethod: paymentMethodCopy})
+        const channelMethodCopy = {...channelMethod}
+        channelMethodCopy[event.target.name] = event.target.value
+        setState({...state, channelMethod: channelMethodCopy})
     }
 
     function handleFormSubmit(event) {
@@ -55,10 +55,10 @@ export default function PaymentMethodForm(){
         setState({ ...state, showWaiting: true, errors: {} })
         try {
             //Chama a validação da biblioteca Joi
-            await PaymentMethod.validateAsync(paymentMethod)
+            await ChannelMethod.validateAsync(channelMethod)
 
 
-            await myfetch.post(API_PATH, paymentMethod)
+            await myfetch.post(API_PATH, channelMethod)
             // Dar feedBack positivo e votlar para a listagem
             setState({
                 ...state,
@@ -115,7 +115,7 @@ export default function PaymentMethodForm(){
             </Notification>
             
 
-            <PageTitle title="Cadastrar novo método de pagamento" />
+            <PageTitle title="Cadastrar novo canal" />
 
             <div>{notif.severity}</div>
 
@@ -126,23 +126,23 @@ export default function PaymentMethodForm(){
             required
             fullWidth
             name="description"    // Nome do campo na tabela
-            value={paymentMethod.description}        //Nome do campo na tabela
+            value={channelMethod.description}        //Nome do campo na tabela
             onChange= {handleFormFieldChange}
             error={errors?.description}
             helperText={errors?.description}
             />
         
             <TextField 
-            label="Taxa de operação"
+            label="Taxa de comissão"
             variant="filled"
             type="number"
             required
             fullWidth
-            name="operator_fee"    // Nome do campo na tabela
-            value={paymentMethod.operator_fee}        //Nome do campo na tabela
+            name="commission_fee"    // Nome do campo na tabela
+            value={channelMethod.commission_fee}        //Nome do campo na tabela
             onChange= {handleFormFieldChange}
-            error={errors?.operator_fee}
-            helperText={errors?.operator_fee}
+            error={errors?.commission_fee}
+            helperText={errors?.commission_fee}
             />
 
         <Fab 
