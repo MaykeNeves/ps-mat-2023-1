@@ -8,19 +8,19 @@ import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
 import Notification from '../../components/ui/Notification';
 import { useNavigate } from 'react-router-dom';
-import ChannelMethod from '../../models/ChannelMethod';
+import Tag from '../../models/Tag';
 import getValidationMessages from '../../utils/getValidationMessages';
 
-export default function ChannelMethodForm(){
+export default function TagForm(){
 
-    const API_PATH = '/channel'
+    const API_PATH = '/tags'
 
     const navigate = useNavigate()
 
     const [state,setState] = React.useState({
-        channelMethod: {
-            description: '',
-            commission_fee: ''
+        tag: {
+            name: ''
+            
         },
         errors: {},
         showWaiting: false,
@@ -32,16 +32,16 @@ export default function ChannelMethodForm(){
     })
 
     const{
-        channelMethod,
+        tag,
         errors,
         showWaiting,
         notif
     } = state
 
     function handleFormFieldChange(event){
-        const channelMethodCopy = {...channelMethod}
-        channelMethodCopy[event.target.name] = event.target.value
-        setState({...state, channelMethod: channelMethodCopy})
+        const tagCopy = {...tag}
+        tagCopy[event.target.name] = event.target.value
+        setState({...state, tag: tagCopy})
     }
 
     function handleFormSubmit(event) {
@@ -55,10 +55,10 @@ export default function ChannelMethodForm(){
         setState({ ...state, showWaiting: true, errors: {} })
         try {
             //Chama a validação da biblioteca Joi
-            await ChannelMethod.validateAsync(channelMethod)
+            await Tag.validateAsync(tag)
 
 
-            await myfetch.post(API_PATH, channelMethod)
+            await myfetch.post(API_PATH, tag)
             // Dar feedBack positivo e votlar para a listagem
             setState({
                 ...state,
@@ -115,34 +115,33 @@ export default function ChannelMethodForm(){
             </Notification>
             
 
-            <PageTitle title="Cadastrar novo canal" />
+            <PageTitle title="Cadastrar nova tag" />
 
             <div>{notif.severity}</div>
 
             <form onSubmit={handleFormSubmit}>
             <TextField 
-            label="Descrição"
+            label="description"
             variant="filled"
             required
             fullWidth
             name="description"    // Nome do campo na tabela
-            value={channelMethod.description}        //Nome do campo na tabela
+            value={tag.description}        //Nome do campo na tabela
             onChange= {handleFormFieldChange}
             error={errors?.description}
             helperText={errors?.description}
             />
-        
+
             <TextField 
-            label="Taxa de comissão"
+            label="color"
             variant="filled"
-            type="number"
             required
             fullWidth
-            name="commission_fee"    // Nome do campo na tabela
-            value={channelMethod.commission_fee}        //Nome do campo na tabela
+            name="description"    // Nome do campo na tabela
+            value={tag.color}        //Nome do campo na tabela
             onChange= {handleFormFieldChange}
-            error={errors?.commission_fee}
-            helperText={errors?.commission_fee}
+            error={errors?.color}
+            helperText={errors?.color}
             />
 
         <Fab 

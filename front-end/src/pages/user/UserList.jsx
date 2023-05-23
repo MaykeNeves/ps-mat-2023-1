@@ -16,12 +16,12 @@ import Button from '@mui/material/Button'
 import {Link} from 'react-router-dom'
 import AddCircleIcon from '@mui/icons-material/AddCircle'
 
-export default function PaymentMethodList(){
+export default function UserList(){
 
-    const API_PATH = '/payment_methods'
+    const API_PATH = '/users'
 
     const [state, setState] = React.useState({
-      paymentMethods: [],
+      users: [],
       showWaiting: false,
       showDialog: false,
       deleteId: null,
@@ -32,7 +32,7 @@ export default function PaymentMethodList(){
     }
     })
     const {
-      paymentMethods,
+      users,
       showWaiting,
       showDialog,
       deleteId,
@@ -43,7 +43,7 @@ export default function PaymentMethodList(){
         setState({...state, showWaiting: true})
         try{
             const result = await myfetch.get(API_PATH)
-            setState({...state, paymentMethods: result, showWaiting: false, showDialog: false })
+            setState({...state, users: result, showWaiting: false, showDialog: false })
         }
         catch(error){
             console.log(error)
@@ -60,13 +60,13 @@ export default function PaymentMethodList(){
     const columns = [
         { field: 'id', headerName: 'Cód', width: 90 },
         {
-          field: 'description',
-          headerName: 'Descrição',
+          field: 'nome',
+          headerName: 'nome',
           width: 150
         },
         {
-          field: 'operator_fee',
-          headerName: 'Taxa de operação',
+          field: 'email',
+          headerName: 'email',
           width: 150
           
         },
@@ -199,7 +199,7 @@ export default function PaymentMethodList(){
 
         <Paper elevation={4} sx={{ height: 400, width: '100%' }}>
       <DataGrid
-        rows={paymentMethods}
+        rows={users}
         columns={columns}
         initialState={{
           pagination: {

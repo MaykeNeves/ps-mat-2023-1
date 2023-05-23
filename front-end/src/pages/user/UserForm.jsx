@@ -7,20 +7,21 @@ import myfetch from '../../utils/myfetch';
 import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
 import Notification from '../../components/ui/Notification';
-import { useNavigate } from 'react-router-dom';
-import ChannelMethod from '../../models/ChannelMethod';
+import { useNavigate, useParams } from 'react-router-dom';
+import User from '../../models/User';
 import getValidationMessages from '../../utils/getValidationMessages';
 
-export default function ChannelMethodForm(){
+export default function UserForm(){
 
-    const API_PATH = '/channel'
+    const API_PATH = '/users'
 
     const navigate = useNavigate()
+    const params = useParams()
 
     const [state,setState] = React.useState({
-        channelMethod: {
+        user: {
             description: '',
-            commission_fee: ''
+            operator_fee: ''
         },
         errors: {},
         showWaiting: false,
@@ -32,16 +33,16 @@ export default function ChannelMethodForm(){
     })
 
     const{
-        channelMethod,
+        user,
         errors,
         showWaiting,
         notif
     } = state
 
     function handleFormFieldChange(event){
-        const channelMethodCopy = {...channelMethod}
-        channelMethodCopy[event.target.name] = event.target.value
-        setState({...state, channelMethod: channelMethodCopy})
+        const userCopy = {...user}
+        userCopy[event.target.name] = event.target.value
+        setState({...state, user: userCopy})
     }
 
     function handleFormSubmit(event) {
@@ -51,14 +52,55 @@ export default function ChannelMethodForm(){
         sendData()
     }
 
+    //Este useEffect será executando apenas durante o carregamento
+    //inicial da página
+    React.useEffect( () => {
+        // Se houver parâmetro id na rota, devemos caregar um registro
+        // existente para edição
+        if(params.id) fetchData()
+    },[])
+
+    async function fetchData() {
+        setState({...state, showWaiting: true, errors:{ }})
+        try{
+            const result = await myfetch.get(`${API_PATH}/${params.id}`)
+            setState({
+                ...state,
+                user:result,
+                showWaiting: false
+            })
+        }
+        catch(error){
+            console.error(error)
+            setState({ 
+                ...state, 
+                showWaiting: false,
+                errors: errorMessages,
+                notif: {
+                    severity: 'error',
+                    show: true,
+                    message: 'ERRO: ' + error.message
+                }
+            })
+        }
+    }
+
     async function sendData(){
         setState({ ...state, showWaiting: true, errors: {} })
         try {
             //Chama a validação da biblioteca Joi
-            await ChannelMethod.validateAsync(channelMethod)
+            await User.validateAsync(user, {abortEarly: false})
+
+            alert(params.id)
+
+            // Registro já existe: chama PUT para atualizar
+            if(params.id) await myfetch.put(`${API_PATH}/${params.id}`, user)
+
+            //Registro não existe: chama POST para criar
+            else await myfetch.post(API_PATH, user)
 
 
-            await myfetch.post(API_PATH, channelMethod)
+            await myfetch.post(API_PATH, user)
             // Dar feedBack positivo e votlar para a listagem
             setState({
                 ...state,
@@ -67,7 +109,7 @@ export default function ChannelMethodForm(){
                 notif: {
                     severity: 'success',
                     show: true,
-                    message: 'Novo item salvo com sucesso'
+                    message: 'Item salvo com sucesso'
                 }
             })
             
@@ -115,34 +157,34 @@ export default function ChannelMethodForm(){
             </Notification>
             
 
-            <PageTitle title="Cadastrar novo canal" />
+            <PageTitle title={params.id ? "Editar método de pagamento" : "Cadastrar novo método de pagamento"} />
 
             <div>{notif.severity}</div>
 
             <form onSubmit={handleFormSubmit}>
             <TextField 
-            label="Descrição"
+            label="Nome"
             variant="filled"
             required
             fullWidth
-            name="description"    // Nome do campo na tabela
-            value={channelMethod.description}        //Nome do campo na tabela
+            name="nome"    // Nome do campo na tabela
+            value={user.nome}        //Nome do campo na tabela
             onChange= {handleFormFieldChange}
-            error={errors?.description}
-            helperText={errors?.description}
+            error={errors?.nome}
+            helperText={errors?.nome}
             />
         
             <TextField 
-            label="Taxa de comissão"
+            label="Email"
             variant="filled"
-            type="number"
+            
             required
             fullWidth
-            name="commission_fee"    // Nome do campo na tabela
-            value={channelMethod.commission_fee}        //Nome do campo na tabela
+            name="email"    // Nome do campo na tabela
+            value={user.email}        //Nome do campo na tabela
             onChange= {handleFormFieldChange}
-            error={errors?.commission_fee}
-            helperText={errors?.commission_fee}
+            error={errors?.email}
+            helperText={errors?.email}
             />
 
         <Fab 

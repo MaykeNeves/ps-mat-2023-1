@@ -16,12 +16,12 @@ import Button from '@mui/material/Button'
 import {Link} from 'react-router-dom'
 import AddCircleIcon from '@mui/icons-material/AddCircle'
 
-export default function PaymentMethodList(){
+export default function TagList(){
 
-    const API_PATH = '/payment_methods'
+    const API_PATH = '/tags'
 
     const [state, setState] = React.useState({
-      paymentMethods: [],
+      tags: [],
       showWaiting: false,
       showDialog: false,
       deleteId: null,
@@ -32,7 +32,7 @@ export default function PaymentMethodList(){
     }
     })
     const {
-      paymentMethods,
+      tags,
       showWaiting,
       showDialog,
       deleteId,
@@ -43,7 +43,7 @@ export default function PaymentMethodList(){
         setState({...state, showWaiting: true})
         try{
             const result = await myfetch.get(API_PATH)
-            setState({...state, paymentMethods: result, showWaiting: false, showDialog: false })
+            setState({...state, tags: result, showWaiting: false, showDialog: false })
         }
         catch(error){
             console.log(error)
@@ -65,8 +65,8 @@ export default function PaymentMethodList(){
           width: 150
         },
         {
-          field: 'operator_fee',
-          headerName: 'Taxa de operação',
+          field: 'color',
+          headerName: 'Cor',
           width: 150
           
         },
@@ -177,7 +177,7 @@ export default function PaymentMethodList(){
         
         </Typography>
 
-        <PageTitle title="Listagem de métodos de pagamento" />
+        <PageTitle title="Listagem de tags" />
 
         <Box sx={{
           display: "flex",
@@ -199,7 +199,7 @@ export default function PaymentMethodList(){
 
         <Paper elevation={4} sx={{ height: 400, width: '100%' }}>
       <DataGrid
-        rows={paymentMethods}
+        rows={tags}
         columns={columns}
         initialState={{
           pagination: {

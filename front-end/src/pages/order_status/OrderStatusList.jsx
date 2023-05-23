@@ -16,12 +16,12 @@ import Button from '@mui/material/Button'
 import {Link} from 'react-router-dom'
 import AddCircleIcon from '@mui/icons-material/AddCircle'
 
-export default function PaymentMethodList(){
+export default function OrderStatusList(){
 
-    const API_PATH = '/payment_methods'
+    const API_PATH = '/order_statuses'
 
     const [state, setState] = React.useState({
-      paymentMethods: [],
+      orderStatuses: [],
       showWaiting: false,
       showDialog: false,
       deleteId: null,
@@ -32,7 +32,7 @@ export default function PaymentMethodList(){
     }
     })
     const {
-      paymentMethods,
+      orderStatuses,
       showWaiting,
       showDialog,
       deleteId,
@@ -43,7 +43,7 @@ export default function PaymentMethodList(){
         setState({...state, showWaiting: true})
         try{
             const result = await myfetch.get(API_PATH)
-            setState({...state, paymentMethods: result, showWaiting: false, showDialog: false })
+            setState({...state, orderStatuses: result, showWaiting: false, showDialog: false })
         }
         catch(error){
             console.log(error)
@@ -60,16 +60,11 @@ export default function PaymentMethodList(){
     const columns = [
         { field: 'id', headerName: 'Cód', width: 90 },
         {
-          field: 'description',
-          headerName: 'Descrição',
+          field: 'name',
+          headerName: 'name',
           width: 150
         },
-        {
-          field: 'operator_fee',
-          headerName: 'Taxa de operação',
-          width: 150
-          
-        },
+        
         {
             field: 'edit',
             headerName: 'Editar',
@@ -77,11 +72,9 @@ export default function PaymentMethodList(){
             align: 'center',
             width: 90,
             renderCell: params => (
-              <Link to={'./' + params.id}>
                 <IconButton aria-label="Editar" >
                     <EditIcon />
                 </IconButton>
-                </Link>
             )
         },
         {
@@ -177,7 +170,7 @@ export default function PaymentMethodList(){
         
         </Typography>
 
-        <PageTitle title="Listagem de métodos de pagamento" />
+        <PageTitle title="Listagem de Ordem de status" />
 
         <Box sx={{
           display: "flex",
@@ -199,7 +192,7 @@ export default function PaymentMethodList(){
 
         <Paper elevation={4} sx={{ height: 400, width: '100%' }}>
       <DataGrid
-        rows={paymentMethods}
+        rows={orderStatuses}
         columns={columns}
         initialState={{
           pagination: {

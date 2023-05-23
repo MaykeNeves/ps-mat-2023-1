@@ -7,20 +7,21 @@ import myfetch from '../../utils/myfetch';
 import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
 import Notification from '../../components/ui/Notification';
-import { useNavigate } from 'react-router-dom';
-import ChannelMethod from '../../models/ChannelMethod';
+import { useNavigate, useParams } from 'react-router-dom';
+import OrderStatus from '../../models/OrderStatus';
 import getValidationMessages from '../../utils/getValidationMessages';
 
-export default function ChannelMethodForm(){
+export default function OrderStatusForm(){
 
-    const API_PATH = '/channel'
+    const API_PATH = '/order_statuses'
 
     const navigate = useNavigate()
+    const params = useParams()
 
     const [state,setState] = React.useState({
-        channelMethod: {
-            description: '',
-            commission_fee: ''
+        orderStatus: {
+            sequence: '',
+            description: ''
         },
         errors: {},
         showWaiting: false,
@@ -32,16 +33,16 @@ export default function ChannelMethodForm(){
     })
 
     const{
-        channelMethod,
+        orderStatus,
         errors,
         showWaiting,
         notif
     } = state
 
     function handleFormFieldChange(event){
-        const channelMethodCopy = {...channelMethod}
-        channelMethodCopy[event.target.name] = event.target.value
-        setState({...state, channelMethod: channelMethodCopy})
+        const orderStatusCopy = {...orderStatus}
+        orderStatusCopy[event.target.name] = event.target.value
+        setState({...state, orderStatus: orderStatusCopy})
     }
 
     function handleFormSubmit(event) {
@@ -51,14 +52,45 @@ export default function ChannelMethodForm(){
         sendData()
     }
 
+    React.useEffect( () => {
+        // Se houver parâmetro id na rota, devemos caregar um registro
+        // existente para edição
+        if(params.id) fetchData()
+    },[])
+
+    async function fetchData() {
+        setState({...state, showWaiting: true, errors:{ }})
+        try{
+            const result = await myfetch.get(`${API_PATH}/${params.id}`)
+            setState({
+                ...state,
+                orderStatus:result,
+                showWaiting: false
+            })
+        }
+        catch(error){
+            console.error(error)
+            setState({ 
+                ...state, 
+                showWaiting: false,
+                errors: errorMessages,
+                notif: {
+                    severity: 'error',
+                    show: true,
+                    message: 'ERRO: ' + error.message
+                }
+            })
+        }
+    }
+
     async function sendData(){
         setState({ ...state, showWaiting: true, errors: {} })
         try {
             //Chama a validação da biblioteca Joi
-            await ChannelMethod.validateAsync(channelMethod)
+            await OrderStatus.validateAsync(orderStatus)
 
 
-            await myfetch.post(API_PATH, channelMethod)
+            await myfetch.post(API_PATH, orderStatus)
             // Dar feedBack positivo e votlar para a listagem
             setState({
                 ...state,
@@ -115,34 +147,34 @@ export default function ChannelMethodForm(){
             </Notification>
             
 
-            <PageTitle title="Cadastrar novo canal" />
+            <PageTitle title={params.id ? "Editar ordem status" : "Cadastrar novo ordem status"} />
 
             <div>{notif.severity}</div>
 
             <form onSubmit={handleFormSubmit}>
             <TextField 
-            label="Descrição"
+            label="Sequencia"
             variant="filled"
             required
             fullWidth
-            name="description"    // Nome do campo na tabela
-            value={channelMethod.description}        //Nome do campo na tabela
+            name="sequencia"    // Nome do campo na tabela
+            value={orderStatus.sequencia}        //Nome do campo na tabela
             onChange= {handleFormFieldChange}
-            error={errors?.description}
-            helperText={errors?.description}
+            error={errors?.sequencia}
+            helperText={errors?.sequencia}
             />
         
             <TextField 
-            label="Taxa de comissão"
+            label="Descricao"
             variant="filled"
-            type="number"
+            
             required
             fullWidth
-            name="commission_fee"    // Nome do campo na tabela
-            value={channelMethod.commission_fee}        //Nome do campo na tabela
+            name="descricao"    // Nome do campo na tabela
+            value={orderStatus.description}        //Nome do campo na tabela
             onChange= {handleFormFieldChange}
-            error={errors?.commission_fee}
-            helperText={errors?.commission_fee}
+            error={errors?.description}
+            helperText={errors?.description}
             />
 
         <Fab 

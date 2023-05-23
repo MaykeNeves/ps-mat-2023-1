@@ -18,7 +18,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle'
 
 export default function ChannelMethodList(){
 
-    const API_PATH = '/channels'
+    const API_PATH = '/channel'
 
     const [state, setState] = React.useState({
       channelMethods: [],
