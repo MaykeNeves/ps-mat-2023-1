@@ -7,7 +7,7 @@ import myfetch from '../../utils/myfetch';
 import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
 import Notification from '../../components/ui/Notification';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams  } from 'react-router-dom';
 import Tag from '../../models/Tag';
 import getValidationMessages from '../../utils/getValidationMessages';
 
@@ -16,10 +16,13 @@ export default function TagForm(){
     const API_PATH = '/tags'
 
     const navigate = useNavigate()
+    const params = useParams()
 
     const [state,setState] = React.useState({
         tag: {
-            name: ''
+            description: '',
+            color: '',
+            type: 0
             
         },
         errors: {},
@@ -51,15 +54,52 @@ export default function TagForm(){
         sendData()
     }
 
+    //Este useEffect será executando apenas durante o carregamento
+    //inicial da página
+    React.useEffect( () => {
+        // Se houver parâmetro id na rota, devemos caregar um registro
+        // existente para edição
+        if(params.id) fetchData()
+    },[])
+
+    async function fetchData() {
+        setState({...state, showWaiting: true, errors:{ }})
+        try{
+            const result = await myfetch.get(`${API_PATH}/${params.id}`)
+            setState({
+                ...state,
+                tag:result,
+                showWaiting: false
+            })
+        }
+        catch(error){
+            console.error(error)
+            setState({ 
+                ...state, 
+                showWaiting: false,
+                errors: errorMessages,
+                notif: {
+                    severity: 'error',
+                    show: true,
+                    message: 'ERRO: ' + error.message
+                }
+            })
+        }
+    }
+
     async function sendData(){
         setState({ ...state, showWaiting: true, errors: {} })
         try {
             //Chama a validação da biblioteca Joi
-            await Tag.validateAsync(tag)
+            await Tag.validateAsync(tag, {abortEarly: false})
 
+             // Registro já existe: chama PUT para atualizar
+             if (params.id) await myfetch.put(`${API_PATH}/${params.id}`, tag)
+      
+             // Registro não existe: chama POST para criar
+             else await myfetch.post(API_PATH, tag)
+             // Dar feedBack positivo e votlar para a listagem
 
-            await myfetch.post(API_PATH, tag)
-            // Dar feedBack positivo e votlar para a listagem
             setState({
                 ...state,
                 showWaiting: false,
@@ -75,7 +115,7 @@ export default function TagForm(){
         catch(error){
             const { validationError, errorMessages } = getValidationMessages(error)
 
-            console.log(error)
+            console.error(error)
             // Dar FeedBack Negativo
             setState({ 
                 ...state, 
@@ -115,9 +155,8 @@ export default function TagForm(){
             </Notification>
             
 
-            <PageTitle title="Cadastrar nova tag" />
+            <PageTitle title={params.id ? "Editar Etiqueta" : "Cadastrar nova etiqueta"} />
 
-            <div>{notif.severity}</div>
 
             <form onSubmit={handleFormSubmit}>
             <TextField 
@@ -137,11 +176,23 @@ export default function TagForm(){
             variant="filled"
             required
             fullWidth
-            name="description"    // Nome do campo na tabela
+            name="color"    // Nome do campo na tabela
             value={tag.color}        //Nome do campo na tabela
             onChange= {handleFormFieldChange}
             error={errors?.color}
             helperText={errors?.color}
+            />
+
+            <TextField 
+            label="type"
+            variant="filled"
+            required
+            fullWidth
+            name="type"    // Nome do campo na tabela
+            value={tag.type}        //Nome do campo na tabela
+            onChange= {handleFormFieldChange}
+            error={errors?.type}
+            helperText={errors?.type}
             />
 
         <Fab 

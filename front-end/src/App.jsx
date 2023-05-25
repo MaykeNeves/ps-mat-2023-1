@@ -41,29 +41,33 @@ function App() {
           <Route path="/login" element={<Login />} />
 
           <Route path="/payment_method" element={<AuthGuard><PaymentMethodList /> </AuthGuard>} />
-
           <Route path="/payment_method/new" element={<AuthGuard><PaymentMethodForm /> </AuthGuard>} />
-
           <Route path="/payment_method/:id" element={<AuthGuard><PaymentMethodForm /> </AuthGuard>} />
 
-          <Route path="/channel" element={<AuthGuard><ChannelMethodList /> </AuthGuard>} />
+          <Route path="/channels" element={<AuthGuard><ChannelMethodList /> </AuthGuard>} />
+          <Route path="/channels/new" element={<AuthGuard><ChannelMethodForm /> </AuthGuard>} />
+          <Route path="/channels/:id" element={<AuthGuard><ChannelMethodForm /> </AuthGuard>} />
 
-          <Route path="/channel/new" element={<AuthGuard><ChannelMethodForm /> </AuthGuard>} />
 
-          <Route path="/carrier" element={<AuthGuard><CarrierMethodList /> </AuthGuard>} />
-          <Route path="/carrier/new" element={<AuthGuard><CarrierMethodForm /> </AuthGuard>} />
+          <Route path="/carriers" element={<AuthGuard><CarrierMethodList /> </AuthGuard>} />
+          <Route path="/carriers/new" element={<AuthGuard><CarrierMethodForm /> </AuthGuard>} />
+          <Route path="/carriers/:id" element={<AuthGuard><CarrierMethodForm /> </AuthGuard>} />
 
           <Route path="/shipment_priority" element={<AuthGuard><ShipmentPriorityList /> </AuthGuard>} />
           <Route path="/shipment_priority/new" element={<AuthGuard><ShipmentPriorityForm /> </AuthGuard>} />
+          <Route path="/shipment_priority/:id" element={<AuthGuard><ShipmentPriorityForm /> </AuthGuard>} />
 
           <Route path="/order_status" element={<AuthGuard><OrderStatusList /> </AuthGuard>} />
           <Route path="/order_status/new" element={<AuthGuard><OrderStatusForm /> </AuthGuard>} />
+          <Route path="/order_status/:id" element={<AuthGuard><OrderStatusForm /> </AuthGuard>} />
 
           <Route path="/tag" element={<AuthGuard><TagList /> </AuthGuard>} />
           <Route path="/tag/new" element={<AuthGuard><TagForm /> </AuthGuard>} />
+          <Route path="/tag/:id" element={<AuthGuard><TagForm /> </AuthGuard>} />
 
           <Route path="/user" element={<AuthGuard><UserList /> </AuthGuard>} />
           <Route path="/user/new" element={<AuthGuard><UserForm /> </AuthGuard>} />
+          <Route path="/user/:id" element={<AuthGuard><UserForm /> </AuthGuard>} />
 
         </Routes>
         </Box>

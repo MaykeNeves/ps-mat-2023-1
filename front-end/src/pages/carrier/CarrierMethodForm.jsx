@@ -7,7 +7,7 @@ import myfetch from '../../utils/myfetch';
 import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
 import Notification from '../../components/ui/Notification';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import CarrierMethod from '../../models/CarrierMethod';
 import getValidationMessages from '../../utils/getValidationMessages';
 
@@ -16,6 +16,7 @@ export default function CarrierMethodForm(){
     const API_PATH = '/carriers'
 
     const navigate = useNavigate()
+    const params = useParams()
 
     const [state,setState] = React.useState({
         carrierMethod: {
@@ -51,15 +52,53 @@ export default function CarrierMethodForm(){
         sendData()
     }
 
+    //Este useEffect será executando apenas durante o carregamento
+    //inicial da página
+    React.useEffect( () => {
+        // Se houver parâmetro id na rota, devemos caregar um registro
+        // existente para edição
+        if(params.id) fetchData()
+    },[])
+
+
+    async function fetchData() {
+        setState({...state, showWaiting: true, errors:{ }})
+        try{
+            const result = await myfetch.get(`${API_PATH}/${params.id}`)
+            setState({
+                ...state,
+                carrierMethod:result,
+                showWaiting: false
+            })
+        }
+        catch(error){
+            console.error(error)
+            setState({ 
+                ...state, 
+                showWaiting: false,
+                errors: errorMessages,
+                notif: {
+                    severity: 'error',
+                    show: true,
+                    message: 'ERRO: ' + error.message
+                }
+            })
+        }
+    }
+
     async function sendData(){
         setState({ ...state, showWaiting: true, errors: {} })
         try {
             //Chama a validação da biblioteca Joi
-            await CarrierMethod.validateAsync(carrierMethod)
+            await CarrierMethod.validateAsync(carrierMethod, {abortEarly: false})
 
 
-            await myfetch.post(API_PATH, carrierMethod)
-            // Dar feedBack positivo e votlar para a listagem
+              // Registro já existe: chama PUT para atualizar
+              if (params.id) await myfetch.put(`${API_PATH}/${params.id}`, carrierMethod)
+      
+              // Registro não existe: chama POST para criar
+              else await myfetch.post(API_PATH, carrierMethod)
+              // Dar feedBack positivo e votlar para a listagem
             setState({
                 ...state,
                 showWaiting: false,
@@ -75,7 +114,7 @@ export default function CarrierMethodForm(){
         catch(error){
             const { validationError, errorMessages } = getValidationMessages(error)
 
-            console.log(error)
+            console.error(error)
             // Dar FeedBack Negativo
             setState({ 
                 ...state, 
@@ -115,13 +154,13 @@ export default function CarrierMethodForm(){
             </Notification>
             
 
-            <PageTitle title="Cadastrar novo transportador" />
+            <PageTitle title={params.id ? "Editar Transportador" : "Cadastrar novo transportador"} />
 
-            <div>{notif.severity}</div>
+            
 
             <form onSubmit={handleFormSubmit}>
             <TextField 
-            label="name"
+            label="Nome"
             variant="filled"
             required
             fullWidth

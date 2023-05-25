@@ -91,16 +91,11 @@ export default function PaymentMethodForm(){
             //Chama a validação da biblioteca Joi
             await PaymentMethod.validateAsync(paymentMethod, {abortEarly: false})
 
-            alert(params.id)
-
-            // Registro já existe: chama PUT para atualizar
-            if(params.id) await myfetch.put(`${API_PATH}/${params.id}`, paymentMethod)
-
-            //Registro não existe: chama POST para criar
+             // Registro já existe: chama PUT para atualizar
+            if (params.id) await myfetch.put(`${API_PATH}/${params.id}`, paymentMethod)
+      
+            // Registro não existe: chama POST para criar
             else await myfetch.post(API_PATH, paymentMethod)
-
-
-            await myfetch.post(API_PATH, paymentMethod)
             // Dar feedBack positivo e votlar para a listagem
             setState({
                 ...state,
@@ -117,7 +112,7 @@ export default function PaymentMethodForm(){
         catch(error){
             const { validationError, errorMessages } = getValidationMessages(error)
 
-            console.log(error)
+            console.error(error)
             // Dar FeedBack Negativo
             setState({ 
                 ...state, 
@@ -159,7 +154,7 @@ export default function PaymentMethodForm(){
 
             <PageTitle title={params.id ? "Editar método de pagamento" : "Cadastrar novo método de pagamento"} />
 
-            <div>{notif.severity}</div>
+            
 
             <form onSubmit={handleFormSubmit}>
             <TextField 

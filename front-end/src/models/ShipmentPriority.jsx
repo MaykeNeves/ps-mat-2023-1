@@ -12,5 +12,7 @@ const ShipmentPriority = Joi.object({
 
     
 })
+// Permite campos não validados, como id createdAt e updatedAt
+.options({allowUnknown: true});
 
 export default ShipmentPriority

@@ -7,15 +7,16 @@ import myfetch from '../../utils/myfetch';
 import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
 import Notification from '../../components/ui/Notification';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import ChannelMethod from '../../models/ChannelMethod';
 import getValidationMessages from '../../utils/getValidationMessages';
 
 export default function ChannelMethodForm(){
 
-    const API_PATH = '/channel'
+    const API_PATH = '/channels'
 
     const navigate = useNavigate()
+    const params = useParams()
 
     const [state,setState] = React.useState({
         channelMethod: {
@@ -51,15 +52,51 @@ export default function ChannelMethodForm(){
         sendData()
     }
 
+     //Este useEffect será executando apenas durante o carregamento
+    //inicial da página
+    React.useEffect( () => {
+        // Se houver parâmetro id na rota, devemos caregar um registro
+        // existente para edição
+        if(params.id) fetchData()
+    },[])
+
+    async function fetchData() {
+        setState({...state, showWaiting: true, errors:{ }})
+        try{
+            const result = await myfetch.get(`${API_PATH}/${params.id}`)
+            setState({
+                ...state,
+                channelMethod:result,
+                showWaiting: false
+            })
+        }
+        catch(error){
+            console.error(error)
+            setState({ 
+                ...state, 
+                showWaiting: false,
+                errors: errorMessages,
+                notif: {
+                    severity: 'error',
+                    show: true,
+                    message: 'ERRO: ' + error.message
+                }
+            })
+        }
+    }
+
     async function sendData(){
         setState({ ...state, showWaiting: true, errors: {} })
         try {
             //Chama a validação da biblioteca Joi
-            await ChannelMethod.validateAsync(channelMethod)
+            await ChannelMethod.validateAsync(channelMethod, {abortEarly: false})
 
-
-            await myfetch.post(API_PATH, channelMethod)
-            // Dar feedBack positivo e votlar para a listagem
+        // Registro já existe: chama PUT para atualizar
+        if (params.id) await myfetch.put(`${API_PATH}/${params.id}`, channelMethod)
+            
+        // Registro não existe: chama POST para criar
+        else await myfetch.post(API_PATH, channelMethod)
+        // Dar feedBack positivo e votlar para a listagem
             setState({
                 ...state,
                 showWaiting: false,
@@ -75,7 +112,7 @@ export default function ChannelMethodForm(){
         catch(error){
             const { validationError, errorMessages } = getValidationMessages(error)
 
-            console.log(error)
+            console.error(error)
             // Dar FeedBack Negativo
             setState({ 
                 ...state, 
@@ -115,9 +152,10 @@ export default function ChannelMethodForm(){
             </Notification>
             
 
-            <PageTitle title="Cadastrar novo canal" />
+            <PageTitle title={params.id ? "Editar canal" : "Cadastrar novo canal"} />
 
-            <div>{notif.severity}</div>
+
+            
 
             <form onSubmit={handleFormSubmit}>
             <TextField 

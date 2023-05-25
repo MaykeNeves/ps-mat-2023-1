@@ -4,8 +4,8 @@ import Joi from 'joi'
 
 const OrderStatus = Joi.object({
     
-    sequencia: Joi.number()
-    .min(2)
+    sequence: Joi.number()
+    .min(1)
     .max(30)
     .required()
     .messages(new Error('A sequencia (entre 2 e 30 caracteres)')),
@@ -16,5 +16,8 @@ const OrderStatus = Joi.object({
     .required()
     .messages(new Error('A descrição é obrigatoria'))
 })
+
+// Permite campos não validados, como id createdAt e updatedAt
+.options({allowUnknown: true});
 
 export default OrderStatus

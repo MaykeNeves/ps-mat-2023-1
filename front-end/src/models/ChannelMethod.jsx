@@ -17,4 +17,7 @@ const ChannelMethod = Joi.object({
     .messages(new Error('A taxa de operação deve ser informada (entre 0 e 100)'))
 })
 
+// Permite campos não validados, como id createdAt e updatedAt
+.options({allowUnknown: true});
+
 export default ChannelMethod

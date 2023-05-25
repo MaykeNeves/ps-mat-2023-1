@@ -4,7 +4,7 @@ import Joi from 'joi'
 
 const CarrierMethod = Joi.object({
     
-    description: Joi.string()
+    name: Joi.string()
     .min(2)
     .max(30)
     .required()
@@ -12,5 +12,7 @@ const CarrierMethod = Joi.object({
 
     
 })
+// Permite campos não validados, como id createdAt e updatedAt
+.options({allowUnknown: true});
 
 export default CarrierMethod

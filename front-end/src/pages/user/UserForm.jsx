@@ -20,8 +20,9 @@ export default function UserForm(){
 
     const [state,setState] = React.useState({
         user: {
-            description: '',
-            operator_fee: ''
+            name: '',
+            email: '',
+            password: ''
         },
         errors: {},
         showWaiting: false,
@@ -91,16 +92,11 @@ export default function UserForm(){
             //Chama a validação da biblioteca Joi
             await User.validateAsync(user, {abortEarly: false})
 
-            alert(params.id)
-
             // Registro já existe: chama PUT para atualizar
-            if(params.id) await myfetch.put(`${API_PATH}/${params.id}`, user)
-
-            //Registro não existe: chama POST para criar
+            if (params.id) await myfetch.put(`${API_PATH}/${params.id}`, user)
+      
+            // Registro não existe: chama POST para criar
             else await myfetch.post(API_PATH, user)
-
-
-            await myfetch.post(API_PATH, user)
             // Dar feedBack positivo e votlar para a listagem
             setState({
                 ...state,
@@ -117,7 +113,7 @@ export default function UserForm(){
         catch(error){
             const { validationError, errorMessages } = getValidationMessages(error)
 
-            console.log(error)
+            console.error(error)
             // Dar FeedBack Negativo
             setState({ 
                 ...state, 
@@ -157,9 +153,9 @@ export default function UserForm(){
             </Notification>
             
 
-            <PageTitle title={params.id ? "Editar método de pagamento" : "Cadastrar novo método de pagamento"} />
+            <PageTitle title={params.id ? "Editar usuarios" : "Cadastrar novo usuario"} />
 
-            <div>{notif.severity}</div>
+            
 
             <form onSubmit={handleFormSubmit}>
             <TextField 
@@ -167,11 +163,11 @@ export default function UserForm(){
             variant="filled"
             required
             fullWidth
-            name="nome"    // Nome do campo na tabela
-            value={user.nome}        //Nome do campo na tabela
+            name="name"    // Nome do campo na tabela
+            value={user.name}        //Nome do campo na tabela
             onChange= {handleFormFieldChange}
-            error={errors?.nome}
-            helperText={errors?.nome}
+            error={errors?.name}
+            helperText={errors?.name}
             />
         
             <TextField 
@@ -185,6 +181,19 @@ export default function UserForm(){
             onChange= {handleFormFieldChange}
             error={errors?.email}
             helperText={errors?.email}
+            />
+
+            <TextField 
+            label="Password"
+            variant="filled"
+            
+            required
+            fullWidth
+            name="password"    // Nome do campo na tabela
+            value={user.password}        //Nome do campo na tabela
+            onChange= {handleFormFieldChange}
+            error={errors?.password}
+            helperText={errors?.password}
             />
 
         <Fab 

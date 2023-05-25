@@ -18,7 +18,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle'
 
 export default function ChannelMethodList(){
 
-    const API_PATH = '/channel'
+    const API_PATH = '/channels'
 
     const [state, setState] = React.useState({
       channelMethods: [],
@@ -77,9 +77,11 @@ export default function ChannelMethodList(){
             align: 'center',
             width: 90,
             renderCell: params => (
+              <Link to={'./' + params.id}>
                 <IconButton aria-label="Editar" >
                     <EditIcon />
                 </IconButton>
+                </Link>
             )
         },
         {

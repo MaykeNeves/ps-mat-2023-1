@@ -177,7 +177,7 @@ export default function UserList(){
         
         </Typography>
 
-        <PageTitle title="Listagem de métodos de pagamento" />
+        <PageTitle title="Listagem de Usuários" />
 
         <Box sx={{
           display: "flex",

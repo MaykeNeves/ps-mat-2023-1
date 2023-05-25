@@ -72,9 +72,11 @@ export default function ShipmentPriorityList(){
             align: 'center',
             width: 90,
             renderCell: params => (
+              <Link to={'./' + params.id}>
                 <IconButton aria-label="Editar" >
                     <EditIcon />
                 </IconButton>
+                </Link>
             )
         },
         {

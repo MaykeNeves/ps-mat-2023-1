@@ -20,7 +20,7 @@ export default function OrderStatusForm(){
 
     const [state,setState] = React.useState({
         orderStatus: {
-            sequence: '',
+            sequence: 0,
             description: ''
         },
         errors: {},
@@ -87,10 +87,13 @@ export default function OrderStatusForm(){
         setState({ ...state, showWaiting: true, errors: {} })
         try {
             //Chama a validação da biblioteca Joi
-            await OrderStatus.validateAsync(orderStatus)
+            await OrderStatus.validateAsync(orderStatus, {abortEarly: false})
 
-
-            await myfetch.post(API_PATH, orderStatus)
+            // Registro já existe: chama PUT para atualizar
+            if (params.id) await myfetch.put(`${API_PATH}/${params.id}`, orderStatus)
+                
+            // Registro não existe: chama POST para criar
+            else await myfetch.post(API_PATH, orderStatus)
             // Dar feedBack positivo e votlar para a listagem
             setState({
                 ...state,
@@ -107,7 +110,7 @@ export default function OrderStatusForm(){
         catch(error){
             const { validationError, errorMessages } = getValidationMessages(error)
 
-            console.log(error)
+            console.error(error)
             // Dar FeedBack Negativo
             setState({ 
                 ...state, 
@@ -149,7 +152,7 @@ export default function OrderStatusForm(){
 
             <PageTitle title={params.id ? "Editar ordem status" : "Cadastrar novo ordem status"} />
 
-            <div>{notif.severity}</div>
+           
 
             <form onSubmit={handleFormSubmit}>
             <TextField 
@@ -157,11 +160,11 @@ export default function OrderStatusForm(){
             variant="filled"
             required
             fullWidth
-            name="sequencia"    // Nome do campo na tabela
-            value={orderStatus.sequencia}        //Nome do campo na tabela
+            name="sequence"    // Nome do campo na tabela
+            value={orderStatus.sequence}        //Nome do campo na tabela
             onChange= {handleFormFieldChange}
-            error={errors?.sequencia}
-            helperText={errors?.sequencia}
+            error={errors?.sequence}
+            helperText={errors?.sequence}
             />
         
             <TextField 
@@ -170,7 +173,7 @@ export default function OrderStatusForm(){
             
             required
             fullWidth
-            name="descricao"    // Nome do campo na tabela
+            name="description"    // Nome do campo na tabela
             value={orderStatus.description}        //Nome do campo na tabela
             onChange= {handleFormFieldChange}
             error={errors?.description}
