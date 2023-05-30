@@ -1,4 +1,5 @@
 import './App.css'
+import React from 'react'
 import { BrowserRouter, Route, Routes, Navigate} from 'react-router-dom'
 import Home from './pages/Home'
 import Login from './pages/Login'
@@ -27,18 +28,23 @@ function AuthGuard({children}){
 }
 
 function App() {
- 
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false)
+
+  function onLoginLogout(loggedIn){
+    setIsLoggedIn(loggedIn)
+  }
 
   return (
     
       
       <BrowserRouter>
-        <HeaderBar />
+        <HeaderBar isLoggedIn={isLoggedIn} onLoginLogout={onLoginLogout} />
         <Box sx={ {m:'25px auto', p: '16px'}}>
         <Routes>
           <Route path="/" element={<AuthGuard><Home /> </AuthGuard>} />
 
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={
+          <Login onLoginLogout={onLoginLogout} />} />
 
           <Route path="/payment_method" element={<AuthGuard><PaymentMethodList /> </AuthGuard>} />
           <Route path="/payment_method/new" element={<AuthGuard><PaymentMethodForm /> </AuthGuard>} />

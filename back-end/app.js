@@ -15,7 +15,10 @@ var app = express();
 // habilita que qualquer origem de front-end possa
 // acessar o back-end
 const cors = require('cors')
-app.use(cors())
+app.use(cors({
+    origin: process.env.FRONT_ORIGIN,
+    credentials: true // Exige o envio de cookoie com credenciais
+}))
 
 //Conexão do BD
 const db = require('./models')

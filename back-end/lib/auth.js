@@ -14,14 +14,23 @@ module.exports = (req, res, next) => {
     }
 
     //necessario ter o token para continuar
-    const bearerHeader = req.headers['authorization']
+    // const bearerHeader = req.headers['authorization']
 
     // p tplem map fpo ássp -> HTTP 403:
     //forbidden
-    if(!bearerHeader) return res.status(403).end()
-    
-    const temp = bearerHeader.split(' ')
-    const token = temp[1]
+    // if(!bearerHeader) return res.status(403).end()
+
+        
+    // const temp = bearerHeader.split(' ')
+    // const token = temp[1]
+
+
+    //verifica se otoken foi enviado por meio de cookie
+    const token = req.cookies['AUTH']
+    //console.log({token})
+
+    // se nao fouver token -> HTTP 403: Forbidden
+    if(!token) return res.status(403).end()
 
     //validando o token
     jwt.verify(token, process.env.TOKEN_SECRET, (error, decoded) =>{
