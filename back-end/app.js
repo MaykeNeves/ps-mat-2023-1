@@ -17,7 +17,7 @@ var app = express();
 const cors = require('cors')
 app.use(cors({
     origin: process.env.FRONT_ORIGIN,
-    credentials: true // Exige o envio de cookoie com credenciais
+    credentials: true // Exige o envio de cookie com credenciais
 }))
 
 //Conexão do BD
