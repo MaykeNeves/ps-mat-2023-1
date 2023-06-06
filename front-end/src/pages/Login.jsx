@@ -7,6 +7,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import Notification from '../components/ui/Notification'
 import myfetch from '../utils/myfetch'
 import PageTitle from '../components/ui/PageTitle'
+import { useNavigate } from 'react-router-dom'
 
 export default function Login({ onLoginLogout}){
 
@@ -18,6 +19,8 @@ export default function Login({ onLoginLogout}){
         message: '',
         severity: 'success'
     })
+
+    const navigate = useNavigate()
 
     function handleChange(event){
         if (event.target.name === 'email') setEmail(event.target.value)
@@ -43,6 +46,8 @@ export default function Login({ onLoginLogout}){
                 })
 
                 onLoginLogout(true)
+
+                navigate('/')   //vai para a página inicial
              
         }
 

@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
 import ConfirmDialog from './ConfirmDialog'
-import { Link} from 'react-router-dom';
+import { Link, useNavigate} from 'react-router-dom';
 import MainMenu from './MainMenu'
 import myfetch from '../../utils/myfetch';
 
@@ -18,6 +18,11 @@ export default function HeaderBar({isLoggedIn, onLoginLogout}) {
     showWaiting: false,
    
   })
+
+  const {
+    showDialog,
+    showWaiting
+  } = state
   
   const navigate = useNavigate()
 
@@ -33,7 +38,7 @@ export default function HeaderBar({isLoggedIn, onLoginLogout}) {
         console.error(error)
       } 
       finally{
-        setState({ ...state, showWaiting: true})
+        setState({ ...state, showWaiting: false, showDialog: false})
       }
     }
 
@@ -46,6 +51,11 @@ export default function HeaderBar({isLoggedIn, onLoginLogout}) {
             <ConfirmDialog title="Confirmar operação" open={showDialog} onClose={handleDialogClose}>
               Deseja realmente encerrar a sessão?
             </ConfirmDialog>
+
+            <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={showWaiting}>
+            <CircularProgress color="inherit" />
+            </Backdrop>
+      
       <AppBar position="static">
         <Toolbar>
           
@@ -72,9 +82,7 @@ export default function HeaderBar({isLoggedIn, onLoginLogout}) {
           }
         </Toolbar>
 
-        <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={showWaiting}>
-            <CircularProgress color="inherit" />
-            </Backdrop>
+        
         </AppBar>
     </Box>
   );

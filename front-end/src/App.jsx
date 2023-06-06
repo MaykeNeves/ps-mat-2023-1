@@ -21,14 +21,14 @@ import UserList from './pages/user/UserList'
 import UserForm from './pages/user/UserForm'
 
 
-function AuthGuard({children}){
-  //Estaremos autenticados se tivermos um token gravado no localStorage
-  if(window.localStorage.getItem('token')) return children
-  else return <Navigate to="/login" replace />
-}
-
 function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false)
+
+  function AuthGuard({children}){
+    //Estaremos autenticados se tivermos um token gravado no localStorage
+    if(isLoggedIn) return children
+    else return <Navigate to="/login" replace />
+  }
 
   function onLoginLogout(loggedIn){
     setIsLoggedIn(loggedIn)
