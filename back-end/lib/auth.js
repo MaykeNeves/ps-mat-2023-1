@@ -43,7 +43,7 @@ module.exports = (req, res, next) => {
         //vamos guardar isso na request para usar depois
         req.authUser = decoded
 
-        console.log({authUser: req.authUser})
+        //console.log({authUser: req.authUser})
         next()
     })
 

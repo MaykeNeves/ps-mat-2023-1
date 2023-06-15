@@ -16,7 +16,7 @@ function defaultOptions(body = null , method = 'GET'){
     // nos headers, nesse caso
     const token = window.localStorage.getItem('token')
 
-    if(token)options.headers.Authentication = `Bearer ${token}`
+    if(token) options.headers.Authentication = `Bearer ${token}`
 
     return options
 }

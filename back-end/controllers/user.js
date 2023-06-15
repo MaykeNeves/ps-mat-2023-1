@@ -142,6 +142,8 @@ controller.login = async (req, res) => {
             path: '/',
             maxAge: 24*60*60 // horas, em segundo
         })
+        res.json({auth: true})
+
       }
       else {
         // Senha errada ~> HTTP 401: Unauthorized
